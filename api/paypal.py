@@ -6,7 +6,7 @@ PayPal APIs.
 """
 
 from urlparse import urlsplit, urlunsplit
-import socket, urllib, urllib
+import socket, urllib, urllib2
 from .response import Response
 from .conf import *
 
