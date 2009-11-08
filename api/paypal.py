@@ -5,10 +5,9 @@ Methods to take advantage of the Website Payments Pro and Express Checkout
 PayPal APIs.
 """
 
-from cgi import parse_qs
 from urlparse import urlsplit, urlunsplit
-import socket, urllib, urllib2
-
+import socket, urllib, urllib
+from .response import Response
 from .conf import *
 
 API_AUTHENTICATION_MODES = ("3TOKEN", "UNIPAY")
@@ -119,6 +118,9 @@ def do_mass_pay_raw(**kwargs):
 	return call('MassPay', **kwargs)
 	
 def do_mass_pay(emails_and_amounts, subject = 'Payment Received'):
+	"""Shortcut for the MassPay method.
+	Expects a list of 2-tuples containing a paypal email and amount for each
+	"""
 	data = {
 		'receivertype' : 'EmailAddress',
 		'emailsubject': subject,
@@ -130,6 +132,10 @@ def do_mass_pay(emails_and_amounts, subject = 'Payment Received'):
 		data['l_amt%s' % i] = str(amount)
 		i += 1
 	return call('MassPay', **data)
+	
+def do_pay(email, amount, subject):
+	"""Shortcut for MassPay when there is only one recipient"""
+	return do_mass_pay([(email, amount)], subject=subject)
 	
 def do_direct_payment(paymentaction="Sale", **kwargs):
     """Shortcut for the DoDirectPayment method.
