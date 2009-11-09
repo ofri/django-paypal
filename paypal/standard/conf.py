@@ -29,3 +29,9 @@ if 'paypal.standard.pdt' in settings.INSTALLED_APPS
             IDENTITY_TOKEN = settings.PAYPAL_TEST_IDENTITY_TOKEN
     except:
         raise PayPalSettingsError("You must set PAYPAL_IDENTITY_TOKEN in settings.py. Get this token by enabling PDT in your PayPal account.")
+
+
+CERT = getattr(settings, "PAYPAL_PRIVATE_CERT", '')
+PUB_CERT = getattr(settings, "PAYPAL_PUBLIC_CERT", '')
+PAYPAL_CERT = getattr(settings, "PAYPAL_CERT", '')
+CERT_ID = getattr(settings, "PAYPAL_CERT_ID", '')
