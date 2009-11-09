@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from paypal.standard.conf import *
 from paypal.standard.widgets import ValueHiddenInput, ReservedValueHiddenInput
 from paypal.standard.conf import (POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT, 
-    RECEIVER_EMAIL)
+    RECEIVER_EMAIL, CERT, PUB_CERT, PAYPAL_CERT, CERT_ID)
 
 
 # 20:18:05 Jan 30, 2009 PST - PST timezone support is not included out of the box.

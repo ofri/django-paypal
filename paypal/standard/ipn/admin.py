@@ -60,10 +60,16 @@ class PayPalIPNAdmin(admin.ModelAdmin):
         }),
     )
     list_display = [
-        "__unicode__", "flag", "flag_info", "invoice", "custom", 
+        "__unicode__", "flag","flag_info", "invoice", "custom", 
         "payment_status", "created_at"
     ]
-    search_fields = ["txn_id", "recurring_payment_id"]
-
+    list_filter = [
+        "flag", "payment_status", "auth_status" 
+    ]
+    search_fields = [
+        "txn_id", "recurring_payment_id", "invoice", "custom", 
+        "first_name", "last_name"
+    ]
+    date_hierarchy = "created_at"
 
 admin.site.register(PayPalIPN, PayPalIPNAdmin)
