@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from paypal.standard.conf import *
 from paypal.standard.widgets import ValueHiddenInput, ReservedValueHiddenInput
 from paypal.standard.conf import (POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT, 
-    RECEIVER_EMAIL, CERT, PUB_CERT, PAYPAL_CERT, CERT_ID)
+    RECEIVER_EMAIL, TEST, CERT, PUB_CERT, PAYPAL_CERT, CERT_ID)
 
 
 # 20:18:05 Jan 30, 2009 PST - PST timezone support is not included out of the box.
@@ -97,18 +97,17 @@ class PayPalPaymentsForm(forms.Form):
         self.button_type = button_type
 
     def render(self):
-        return mark_safe(u"""<form action="%s" method="post">
-    %s
-    <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
-</form>""" % (POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
-        
-        
-    def sandbox(self):
-        return mark_safe(u"""<form action="%s" method="post">
-    %s
-    <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
-</form>""" % (SANDBOX_POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
-        
+        if not TEST:
+            return mark_safe(u"""<form action="%s" method="post">
+            %s
+            <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
+            </form>""" % (POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
+        else:
+            return mark_safe(u"""<form action="%s" method="post">
+            %s
+            <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
+            </form>""" % (SANDBOX_POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
+
     def get_image(self):
         return {
             (True, True): SUBSCRIPTION_SANDBOX_IMAGE,
