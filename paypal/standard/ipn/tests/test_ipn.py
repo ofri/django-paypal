@@ -7,13 +7,13 @@ from paypal.standard.models import ST_PP_CANCELLED
 from paypal.standard.ipn.models import PayPalIPN
 from paypal.standard.ipn.signals import (payment_was_successful, 
     payment_was_flagged)
-
+from paypal.standard.conf import RECEIVER_EMAIL
 
 IPN_POST_PARAMS = {
     "protection_eligibility": "Ineligible",
     "last_name": "User",
     "txn_id": "51403485VH153354B",
-    "receiver_email": settings.PAYPAL_RECEIVER_EMAIL,
+    "receiver_email": RECEIVER_EMAIL,
     "payment_status": "Completed",
     "payment_gross": "10.00",
     "tax": "0.00",
@@ -120,6 +120,6 @@ class IPNTest(TestCase):
         self.client.post("/ipn/", IPN_POST_PARAMS)
         self.client.post("/ipn/", IPN_POST_PARAMS)
         self.assertEqual(len(PayPalIPN.objects.all()), 2)        
-        ipn_obj = PayPalIPN.objects.order_by('-created_at')[0]
+        ipn_obj = PayPalIPN.objects.order_by('-id')[0]
         self.assertEqual(ipn_obj.flag, True)
         self.assertEqual(ipn_obj.flag_info, "Duplicate txn_id. (51403485VH153354B)")
