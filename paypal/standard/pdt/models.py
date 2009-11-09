@@ -3,23 +3,12 @@
 from urllib import unquote_plus
 import urllib2
 from django.db import models
-from django.conf import settings
 from django.http import QueryDict
 from django.utils.http import urlencode
 from paypal.standard.models import PayPalStandardBase
 from paypal.standard.conf import POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT
+from paypal.standard.conf import TEST
 from paypal.standard.pdt.signals import pdt_successful, pdt_failed
-
-# ### Todo: Move this logic to conf.py:
-# if paypal.standard.pdt is in installed apps
-# ... then check for this setting in conf.py
-class PayPalSettingsError(Exception):
-    """Raised when settings are incorrect."""
-
-try:
-    IDENTITY_TOKEN = settings.PAYPAL_IDENTITY_TOKEN
-except:
-    raise PayPalSettingsError("You must set PAYPAL_IDENTITY_TOKEN in settings.py. Get this token by enabling PDT in your PayPal account.")
 
 
 class PayPalPDT(PayPalStandardBase):
@@ -47,8 +36,8 @@ class PayPalPDT(PayPalStandardBase):
         return urllib2.urlopen(self.get_endpoint(), postback_params).read()
     
     def get_endpoint(self):
-        """Use the sandbox when in DEBUG mode as we don't have a test_ipn variable in pdt."""
-        if getattr(settings, 'PAYPAL_DEBUG', settings.DEBUG):
+        """Use the sandbox when in TEST mode as we don't have a test_ipn variable in pdt."""
+        if TEST:
             return SANDBOX_POSTBACK_ENDPOINT
         else:
             return POSTBACK_ENDPOINT

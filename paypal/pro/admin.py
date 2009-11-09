@@ -6,5 +6,5 @@ from paypal.pro.models import PayPalNVP
 
 
 class PayPalNVPAdmin(admin.ModelAdmin):
-    list_display = L("user method flag flag_code created_at")
+    list_display = ("user", "method", "flag", "flag_code", "created_at")
 admin.site.register(PayPalNVP, PayPalNVPAdmin)
