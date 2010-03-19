@@ -74,7 +74,7 @@ class PayPalNVP(Model):
             if ack == "SuccessWithWarning":
                 self.flag_info = paypal_response.get('l_longmessage0', '')
             else:
-                self.set_flag(paypal_response.get('l_longmessage0', ''), paypal_response.get('l_errorcode', ''))
+                self.set_flag(paypal_response.get('l_longmessage0', ''), paypal_response.get('l_errorcode0', ''))
 
     def set_flag(self, info, code=None):
         """Flag this instance for investigation."""
