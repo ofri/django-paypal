@@ -3,6 +3,8 @@
 from django import forms
 from django.conf import settings
 from django.utils.safestring import mark_safe
+
+from paypal.fields import COUNTRIES
 from paypal.standard.conf import *
 from paypal.standard.widgets import ValueHiddenInput, ReservedValueHiddenInput
 from paypal.standard.conf import (POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT, 
@@ -91,6 +93,21 @@ class PayPalPaymentsForm(forms.Form):
     currency_code = forms.CharField(widget=forms.HiddenInput(), initial="USD")
     no_shipping = forms.ChoiceField(widget=forms.HiddenInput(), choices=SHIPPING_CHOICES, 
         initial=SHIPPING_CHOICES[0][0])
+
+    # Address fields for pre-filling paypal checkout forms
+    address1 = forms.CharField(widget=ValueHiddenInput())
+    address2 = forms.CharField(widget=ValueHiddenInput())
+    city = forms.CharField(widget=ValueHiddenInput())
+    country = forms.ChoiceField(widget=ValueHiddenInput(), choices=COUNTRIES)
+    email = forms.EmailField(widget=ValueHiddenInput())
+    first_name = forms.CharField(widget=ValueHiddenInput())
+    last_name = forms.CharField(widget=ValueHiddenInput())
+    state = forms.CharField(widget=ValueHiddenInput())
+    zip = forms.CharField(widget=ValueHiddenInput())
+
+    # Tax fields
+    tax = forms.CharField(widget=ValueHiddenInput())
+    tax_rate = forms.CharField(widget=ValueHiddenInput())
 
     def __init__(self, button_type="buy", *args, **kwargs):
         super(PayPalPaymentsForm, self).__init__(*args, **kwargs)
