@@ -145,7 +145,7 @@ class PayPalStandardBase(Model):
     
     # Dispute Resolution Variables
     case_creation_date = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    case_id = models.CharField(max_length=14, blank=True)
+    case_id = models.CharField(max_length=18, blank=True)
     case_type = models.CharField(max_length=24, blank=True)
     
     # Variables not categorized
