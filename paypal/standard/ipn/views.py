@@ -4,9 +4,10 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from paypal.standard.ipn.forms import PayPalIPNForm
 from paypal.standard.ipn.models import PayPalIPN
- 
+from django.views.decorators.csrf import csrf_exempt
  
 @require_POST
+@csrf_exempt
 def ipn(request, item_check_callable=None):
     """
     PayPal IPN endpoint (notify_url).
