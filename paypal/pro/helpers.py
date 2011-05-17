@@ -260,7 +260,7 @@ class PayPalWPP(object):
         
     def _request(self, data):
         """Moved out to make testing easier."""
-        return urllib2.urlopen(self.endpoint, data).read()
+        return urllib2.urlopen(self.endpoint, data, 30).read()
 
     def _check_and_update_params(self, required, params):
         """
