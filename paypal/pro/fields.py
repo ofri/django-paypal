@@ -3,7 +3,6 @@
 from calendar import monthrange
 from datetime import date
 
-from django.db import models
 from django import forms
 from django.utils.translation import ugettext as _
 
@@ -23,7 +22,8 @@ class CreditCardField(forms.CharField):
             self.card_type = verify_credit_card(value)
             if self.card_type is None:
                 raise forms.ValidationError("Invalid credit card number.")
-        return value
+            return value
+        raise forms.ValidationError("Missing credit card number.")
 
 
 # Credit Card Expiry Fields from:
