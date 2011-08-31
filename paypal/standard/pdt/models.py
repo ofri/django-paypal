@@ -65,11 +65,12 @@ class PayPalPDT(PayPalStandardBase):
                 except ValueError, e:
                     pass
 
-        qd = QueryDict('', mutable=True)
-        qd.update(response_dict)
-        qd.update(dict(ipaddress=self.ipaddress, st=self.st, flag_info=self.flag_info))
-        pdt_form = PayPalPDTForm(qd, instance=self)
-        pdt_form.save(commit=False)
+        if not self.flag:
+            qd = QueryDict('', mutable=True)
+            qd.update(response_dict)
+            qd.update(dict(ipaddress=self.ipaddress, st=self.st, flag_info=self.flag_info))
+            pdt_form = PayPalPDTForm(qd, instance=self) 
+            pdt_form.save(commit=False)
         
     def send_signals(self):
         # Send the PDT signals...
