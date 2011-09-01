@@ -239,7 +239,13 @@ class PayPalStandardBase(Model):
         """
         self.response = self._postback()
         self._verify_postback()  
-        if not self.flag:
+
+        # self.flag is set if the paypal object is malformed. A non-validating 
+        # PayPalPDTForm (see pdt.views.pdt()) or postbacks that don't verify
+        # will cause self.flag to be set.
+        invalid_paypal_obj = self.flag
+        
+        if not invalid_paypal_obj:
             if self.is_transaction():
                 if self.payment_status not in self.PAYMENT_STATUS_CHOICES:
                     self.set_flag("Invalid payment_status. (%s)" % self.payment_status)
@@ -257,7 +263,10 @@ class PayPalStandardBase(Model):
                 # @@@ Run a different series of checks on recurring payments.
                 pass
         
-        self.save()
+        if not (invalid_paypal_obj and settings.IGNORE_INVALID_PDT):
+            # IPN objects get saved anyway, see ipn.views.ipn()
+            self.save()
+
         self.send_signals()
 
     def verify_secret(self, form_instance, secret):

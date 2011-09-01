@@ -51,6 +51,7 @@ def pdt(request, item_check_callable=None, template="pdt/pdt.html", context=None
             pdt_obj.initialize(request)
         
             if not failed:
+                pdt_obj.txn_id = txn_id
                 # The PDT object gets saved during verify
                 pdt_obj.verify(item_check_callable)
     else:
