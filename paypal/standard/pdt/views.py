@@ -5,9 +5,19 @@ from django.shortcuts import render_to_response
 from django.views.decorators.http import require_GET
 from paypal.standard.pdt.models import PayPalPDT
 from paypal.standard.pdt.forms import PayPalPDTForm
+from django.views.decorators.csrf import csrf_exempt 
  
- 
-@require_GET
+# 09/23/2011 - Cole Krumbholz
+# Paypal has started POSTing to the return_url
+# GET QueryDict still contains expected parameters
+# POST QueryDict now includes:
+#  <QueryDict: {u'merchant_return_link': [u'click here'], u'form_charset': [u'UTF-8']}>
+# Removing the require_GET decorator keeps a 405 error from hitting the user
+# The view still operates as expected, albeit after limited testing
+#
+# @require_GET
+
+@csrf_exempt
 def pdt(request, item_check_callable=None, template="pdt/pdt.html", context=None):
     """Payment data transfer implementation: http://tinyurl.com/c9jjmw"""
     context = context or {}
