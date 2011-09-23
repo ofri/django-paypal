@@ -240,9 +240,6 @@ class PayPalStandardBase(Model):
         self.response = self._postback()
         self._verify_postback()  
 
-        # self.flag is set if the paypal object is malformed. A non-validating 
-        # PayPalPDTForm (see pdt.views.pdt()) or postbacks that don't verify
-        # will cause self.flag to be set.
         invalid_paypal_obj = self.flag
         
         if not invalid_paypal_obj:
@@ -263,8 +260,16 @@ class PayPalStandardBase(Model):
                 # @@@ Run a different series of checks on recurring payments.
                 pass
         
-        if not (invalid_paypal_obj and settings.IGNORE_INVALID_PDT):
-            # IPN objects get saved anyway, see ipn.views.ipn()
+        # If settings.IGNORE_INVALID_PDT is set, don't save an invalid paypal
+        # object to the db. Invalid paypal objects include non-validating 
+        # PayPalPDTForms (see pdt.views.pdt()) or postbacks that don't verify
+        # Keeps bad PDT requests from filling up your db, a potential attack.
+        # Note this only effects PDT, since IPN objects get saved during
+        # ipn.views.ipn(). 
+
+        if not invalid_paypal_obj or \
+           not hasattr(settings, 'IGNORE_INVALID_PDT') or \
+           not settings.IGNORE_INVALID_PDT:
             self.save()
 
         self.send_signals()

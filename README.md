@@ -143,6 +143,9 @@ Paypal Payment Data Transfer (PDT) allows you to display transaction details to 
             ...
         )
 
+1. You can set settings.IGNORE_INVALID_PDT to ignore invalid PDT requests and keep them from filling up your db, a potential attack.
+
+
 Using PayPal Payments Standard with Subscriptions:
 --------------------------------------------------
 
