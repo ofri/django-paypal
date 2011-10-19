@@ -4,7 +4,7 @@ from django import forms
 from django.conf import settings
 from django.utils.safestring import mark_safe
 
-from paypal.fields import COUNTRIES
+from paypal.pro.fields import COUNTRIES
 from paypal.standard.conf import *
 from paypal.standard.widgets import ValueHiddenInput, ReservedValueHiddenInput
 from paypal.standard.conf import (POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT, 
